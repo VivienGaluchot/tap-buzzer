@@ -38,7 +38,6 @@ Deno.serve({ port: getPort(), hostname: "0.0.0.0" }, async (req) => {
     if (req.method == "POST") {
         if (url.pathname == "/tap") {
             const reqData = await req.json();
-            console.log("Req:", reqData);
 
             const now = Date.now();
             let status;
@@ -55,9 +54,7 @@ Deno.serve({ port: getPort(), hostname: "0.0.0.0" }, async (req) => {
             }
             const remainingTime = Math.max(endOfTap - now, 0);
 
-            const resData = { status, remainingTime };
-            console.log("Resp:", resData);
-
+            const resData = { status, elapsedTime: TAP_RELOAD_INTERVAL_MS - remainingTime, remainingTime };
             return new Response(JSON.stringify(resData), {
                 status: 200,
                 headers: { "content-type": "application/json; charset=utf-8" },

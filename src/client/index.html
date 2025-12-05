@@ -6,7 +6,7 @@
     <title>tap-buzzer</title>
     <style>
         body {
-            background-color: rgb(60, 60, 63);
+            background-color: rgb(30, 30, 31);
             margin: 0;
         }
 
@@ -15,18 +15,27 @@
             width: 100vw;
         }
 
+        .ok #bar,
+        .ko #bar {
+            background-color: white;
+            height: 100%;
+            opacity: 40%;
+        }
+
         .ok {
-            background-color: green;
+            background-color: rgb(40, 197, 40);
         }
 
         .ko {
-            background-color: red;
+            background-color: rgb(240, 24, 24);
         }
     </style>
 </head>
 
 <body>
     <div id="app">
+        <div id="bar">
+        </div>
     </div>
     <script src="./index.js"></script>
 </body>
