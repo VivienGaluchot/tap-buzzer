@@ -1,9 +1,17 @@
 {
     "compilerOptions": {
-        "noUncheckedIndexedAccess": true
+        "noUncheckedIndexedAccess": true,
+        "lib": [
+            "deno.unstable",
+            "dom"
+        ]
     },
     "fmt": {
         "indentWidth": 4,
         "lineWidth": 120
-    }
+    },
+    "unstable": [
+        "bundle",
+        "raw-imports"
+    ]
 }

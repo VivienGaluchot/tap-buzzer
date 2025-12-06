@@ -1,0 +1,70 @@
+import { TapRequest, TapResponse } from "../api.ts";
+import { assertDefined } from "../common.ts";
+
+//-------------------------------------------------------------------------------------------------
+// Private variables
+//-------------------------------------------------------------------------------------------------
+
+// Unique identifier for this client.
+const id = Math.random().toString(36).substring(2, 15);
+
+// Timeout handle for resetting the UI state.
+let timeout: number | undefined;
+
+//-------------------------------------------------------------------------------------------------
+// Private functions
+//-------------------------------------------------------------------------------------------------
+
+// Send a tap request to the server and update the UI based on the response.
+async function tap(appDiv: HTMLElement, barDiv: HTMLElement): Promise<void> {
+    const reqData: TapRequest = { id };
+    const res = await fetch("/tap", { body: JSON.stringify(reqData), method: "POST" });
+    const resData: TapResponse = await res.json();
+
+    if (resData.status == "accepted") {
+        appDiv.classList.remove("ko");
+        appDiv.classList.add("ok");
+    } else {
+        appDiv.classList.remove("ok");
+        appDiv.classList.add("ko");
+    }
+
+    for (const animation of barDiv.getAnimations()) {
+        animation.cancel();
+    }
+
+    const duration = resData.elapsedTime + resData.remainingTime;
+    const keyFrames = new KeyframeEffect(
+        barDiv,
+        [{ width: "0%" }, { width: "100%" }],
+        { duration, fill: "forwards" },
+    );
+
+    const animation = new Animation(keyFrames);
+    animation.currentTime = resData.elapsedTime;
+    animation.play();
+
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+        appDiv.classList.remove("ok");
+        appDiv.classList.remove("ko");
+        timeout = undefined;
+    }, resData.remainingTime);
+}
+
+//-------------------------------------------------------------------------------------------------
+// DOM event handlers
+//-------------------------------------------------------------------------------------------------
+
+const appDiv = assertDefined(document.getElementById("app"));
+const barDiv = assertDefined(document.getElementById("bar"));
+
+appDiv.ontouchstart = (event) => {
+    event.preventDefault();
+    tap(appDiv, barDiv);
+};
+
+appDiv.onmousedown = (event) => {
+    event.preventDefault();
+    tap(appDiv, barDiv);
+};

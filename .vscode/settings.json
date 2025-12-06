@@ -7,9 +7,7 @@
         }
     },
     "terminal.integrated.defaultProfile.linux": "bash",
-    "deno.enablePaths": [
-        "./src"
-    ],
+    "deno.enable": true,
     "deno.config": "./deno.jsonc",
     "[json]": {
         "editor.defaultFormatter": "denoland.vscode-deno"
