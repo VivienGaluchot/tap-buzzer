@@ -3,11 +3,19 @@ import _indexTs from "../client/index.ts" with { type: "text" };
 import hostHmtl from "../client/host.html" with { type: "text" };
 import _hostTs from "../client/host.ts" with { type: "text" };
 
-const CWD = Deno.cwd();
+import buzzerBravo from "../client/audio/buzzer_bravo.mp3" with { type: "bytes" };
+import buzzerCrazyfrog from "../client/audio/buzzer_crazyfrog.mp3" with { type: "bytes" };
+import buzzerTanana from "../client/audio/buzzer_tanana.mp3" with { type: "bytes" };
+import buzzerPouet from "../client/audio/buzzer_pouet.mp3" with { type: "bytes" };
+import buzzerPouetPouet from "../client/audio/buzzer_pouetpouet.mp3" with { type: "bytes" };
+import buzzerTudum from "../client/audio/buzzer_tudum.mp3" with { type: "bytes" };
+import buzzerBilili from "../client/audio/buzzer_bilili.mp3" with { type: "bytes" };
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
+
+const CWD = Deno.cwd();
 
 async function bundle(name: string): Promise<string> {
     const bundleResult = await Deno.bundle({
@@ -56,6 +64,41 @@ export function onGet(req: Request): Response {
         return new Response(hostJs, {
             status: 200,
             headers: { "content-type": "application/javascript; charset=utf-8" },
+        });
+    } else if (url.pathname == "/audio/buzzer_bravo.mp3") {
+        return new Response(buzzerBravo, {
+            status: 200,
+            headers: { "content-type": "audio/mp3" },
+        });
+    } else if (url.pathname == "/audio/buzzer_crazyfrog.mp3") {
+        return new Response(buzzerCrazyfrog, {
+            status: 200,
+            headers: { "content-type": "audio/mp3" },
+        });
+    } else if (url.pathname == "/audio/buzzer_tanana.mp3") {
+        return new Response(buzzerTanana, {
+            status: 200,
+            headers: { "content-type": "audio/mp3" },
+        });
+    } else if (url.pathname == "/audio/buzzer_pouet.mp3") {
+        return new Response(buzzerPouet, {
+            status: 200,
+            headers: { "content-type": "audio/mp3" },
+        });
+    } else if (url.pathname == "/audio/buzzer_pouetpouet.mp3") {
+        return new Response(buzzerPouetPouet, {
+            status: 200,
+            headers: { "content-type": "audio/mp3" },
+        });
+    } else if (url.pathname == "/audio/buzzer_tudum.mp3") {
+        return new Response(buzzerTudum, {
+            status: 200,
+            headers: { "content-type": "audio/mp3" },
+        });
+    } else if (url.pathname == "/audio/buzzer_bilili.mp3") {
+        return new Response(buzzerBilili, {
+            status: 200,
+            headers: { "content-type": "audio/mp3" },
         });
     } else {
         return new Response("Not found", { status: 404 });

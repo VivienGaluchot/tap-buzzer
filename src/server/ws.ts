@@ -1,6 +1,6 @@
 import { HostUpdate, TapRequest, TapResponse } from "../api.ts";
 
-const TAP_RELOAD_INTERVAL_MS = 3000;
+const TAP_RELOAD_INTERVAL_MS = 5000;
 
 let endOfTap = 0;
 let acceptedId: string | null = null;

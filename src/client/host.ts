@@ -16,6 +16,22 @@ const idDiv = assertDefined(document.getElementById("id"));
 // Timeout handle for resetting the UI state.
 let timeout: number | undefined;
 
+const audios = [
+    { w: 1, audio: new Audio("/audio/buzzer_bravo.mp3") },
+    { w: 1, audio: new Audio("/audio/buzzer_crazyfrog.mp3") },
+    { w: 1, audio: new Audio("/audio/buzzer_poke.mp3") },
+    { w: 1, audio: new Audio("/audio/buzzer_bilili.mp3") },
+    { w: 3, audio: new Audio("/audio/buzzer_pouet.mp3") },
+    { w: 3, audio: new Audio("/audio/buzzer_pouetpouet.mp3") },
+    { w: 3, audio: new Audio("/audio/buzzer_tudum.mp3") },
+];
+
+const weightedAudios: HTMLAudioElement[] = [];
+audios.forEach((item) => {
+    const clone: HTMLAudioElement[] = Array(item.w).fill(item.audio);
+    weightedAudios.push(...clone);
+});
+
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
@@ -24,6 +40,8 @@ function set(update: HostUpdate) {
     for (const animation of barDiv.getAnimations()) {
         animation.cancel();
     }
+
+    weightedAudios[Math.floor(Math.random() * weightedAudios.length)]?.play();
 
     appDiv.classList.add("ok");
     idDiv.textContent = `${update.name ?? "?"}`;
@@ -54,4 +72,9 @@ const socket = new WebSocket("host-update");
 socket.onmessage = (event) => {
     const update: HostUpdate = JSON.parse(event.data);
     set(update);
+};
+
+socket.onclose = () => {
+    appDiv.classList.add("ko");
+    idDiv.textContent = "☠";
 };
