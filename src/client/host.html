@@ -15,20 +15,6 @@
             margin: 0;
         }
 
-        #dialog-input {
-            background-color: transparent;
-            color: white;
-            border: none;
-            font-size: 2rem;
-            font-family: "Caveat Brush", cursive;
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        #dialog-input input {
-            font-size: 2rem;
-        }
-
         #app {
             position: relative;
             height: 100vh;
@@ -37,6 +23,16 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+        }
+
+        #id {
+            font-size: 15rem;
+            z-index: 10;
+            color: black;
+            font-family: "Caveat Brush", cursive;
+            font-weight: 400;
+            font-style: normal;
+            word-break: break-all;
         }
 
         .ok #bar,
@@ -60,15 +56,13 @@
 </head>
 
 <body>
-    <dialog id="dialog-input">
-        <label for="name">Entre le nom</label>
-        <div><input autofocus type="text" id="name" placeholder="" /></div>
-    </dialog>
     <div id="app">
-        <div id="bar" hid>
+        <div id="bar">
+        </div>
+        <div id="id">
         </div>
     </div>
-    <script src="./index.js"></script>
+    <script src="./host.js"></script>
 </body>
 
 </html>

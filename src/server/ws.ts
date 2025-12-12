@@ -1,9 +1,10 @@
-import { TapRequest, TapResponse } from "../api.ts";
+import { HostUpdate, TapRequest, TapResponse } from "../api.ts";
 
 const TAP_RELOAD_INTERVAL_MS = 3000;
 
 let endOfTap = 0;
 let acceptedId: string | null = null;
+const hostSockets = new Set<WebSocket>();
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -24,6 +25,10 @@ async function tap(req: Request): Promise<Response> {
         status = "accepted";
         endOfTap = now + TAP_RELOAD_INTERVAL_MS;
         acceptedId = reqData.id;
+        for (const socket of hostSockets) {
+            const update: HostUpdate = { name: reqData.name, remainingTime: TAP_RELOAD_INTERVAL_MS };
+            socket.send(JSON.stringify(update));
+        }
     }
     const remainingTime = Math.max(endOfTap - now, 0);
 
@@ -42,6 +47,22 @@ export async function onPost(req: Request): Promise<Response> {
     const url = new URL(req.url);
     if (url.pathname == "/tap") {
         return await tap(req);
+    } else {
+        return new Response("Not found", { status: 404 });
+    }
+}
+
+export function onWebSocket(req: Request): Response {
+    const url = new URL(req.url);
+    if (url.pathname == "/host-update") {
+        const { socket, response } = Deno.upgradeWebSocket(req);
+        socket.onopen = () => {
+            hostSockets.add(socket);
+        };
+        socket.onclose = () => {
+            hostSockets.delete(socket);
+        };
+        return response;
     } else {
         return new Response("Not found", { status: 404 });
     }

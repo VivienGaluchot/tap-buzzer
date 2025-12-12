@@ -8,6 +8,8 @@ import { assertDefined } from "../common.ts";
 // Unique identifier for this client.
 const id = Math.random().toString(36).substring(2, 15);
 
+let name = "";
+
 // Timeout handle for resetting the UI state.
 let timeout: number | undefined;
 
@@ -17,7 +19,7 @@ let timeout: number | undefined;
 
 // Send a tap request to the server and update the UI based on the response.
 async function tap(appDiv: HTMLElement, barDiv: HTMLElement): Promise<void> {
-    const reqData: TapRequest = { id };
+    const reqData: TapRequest = { id, name };
     const res = await fetch("/tap", { body: JSON.stringify(reqData), method: "POST" });
     const resData: TapResponse = await res.json();
 
@@ -56,14 +58,29 @@ async function tap(appDiv: HTMLElement, barDiv: HTMLElement): Promise<void> {
 // DOM event handlers
 //-------------------------------------------------------------------------------------------------
 
-const appDiv = assertDefined(document.getElementById("app"));
-const barDiv = assertDefined(document.getElementById("bar"));
+const inputDialog = assertDefined(document.getElementById("dialog-input")) as HTMLDialogElement;
+const nameInput = assertDefined(document.getElementById("name")) as HTMLInputElement;
+const appDiv = assertDefined(document.getElementById("app")) as HTMLDivElement;
+const barDiv = assertDefined(document.getElementById("bar")) as HTMLDivElement;
+
+inputDialog.oncancel = (event) => {
+    event.preventDefault();
+};
+
+inputDialog.showModal();
+
+nameInput.onkeydown = (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        name = nameInput.value.trim();
+        inputDialog.close();
+    }
+};
 
 appDiv.ontouchstart = (event) => {
     event.preventDefault();
     tap(appDiv, barDiv);
 };
-
 appDiv.onmousedown = (event) => {
     event.preventDefault();
     tap(appDiv, barDiv);

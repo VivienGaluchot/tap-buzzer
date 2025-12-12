@@ -11,6 +11,11 @@ function getPort(): number {
 
 Deno.serve({ port: getPort(), hostname: "0.0.0.0" }, async (req) => {
     console.log(req.url);
+
+    if (req.headers.get("upgrade") == "websocket") {
+        return ws.onWebSocket(req);
+    }
+
     if (req.method == "GET") {
         return st.onGet(req);
     } else if (req.method == "POST") {
