@@ -2,8 +2,10 @@
     "compilerOptions": {
         "noUncheckedIndexedAccess": true,
         "lib": [
-            "deno.unstable",
-            "dom"
+            "ES2023",
+            "dom",
+            "dom.iterable",
+            "deno.ns"
         ]
     },
     "fmt": {
@@ -11,7 +13,6 @@
         "lineWidth": 120
     },
     "unstable": [
-        "bundle",
         "raw-imports"
     ]
 }
