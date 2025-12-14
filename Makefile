@@ -38,21 +38,16 @@ check:
 # Build targets
 
 .PHONY: build
-build:
-	@mkdir -p out/client
-	@deno bundle src/client/index.ts --output src/client/build/index.js --platform browser
-	@deno bundle src/client/host.ts --output src/client/build/host.js --platform browser
-
-	@mkdir -p out/bin
+build: build_client
 	@deno compile ${SVR_FLAGS} \
 		--target x86_64-unknown-linux-gnu \
-		--output out/bin/tap-buzzer-x86_64-unknown-linux-gnu.bin \
+		--output build/tap-buzzer-x86_64-unknown-linux-gnu.bin \
 		${SVR_TS}
 	@deno compile ${SVR_FLAGS} \
 		--target aarch64-unknown-linux-gnu \
-		--output out/bin/tap-buzzer-aarch64-unknown-linux-gnu.bin \
+		--output build/tap-buzzer-aarch64-unknown-linux-gnu.bin \
 		${SVR_TS}
 	@deno compile ${SVR_FLAGS} \
 		--target x86_64-pc-windows-msvc \
-		--output out/bin/tap-buzzer-x86_64-pc-windows-msvc-gnu.exe \
+		--output build/tap-buzzer-x86_64-pc-windows-msvc-gnu.exe \
 		${SVR_TS}
